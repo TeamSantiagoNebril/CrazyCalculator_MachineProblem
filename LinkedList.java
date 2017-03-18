@@ -2,7 +2,6 @@
 public class LinkedList {
 	private Link first;
 	private Link current;
-	
 	public LinkedList(){
 		first = null;
 	}
