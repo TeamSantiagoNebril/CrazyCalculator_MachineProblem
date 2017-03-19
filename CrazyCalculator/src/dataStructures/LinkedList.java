@@ -1,21 +1,21 @@
 package dataStructures;
 
 
-public class LinkedList {
-	private Link first;
-	private Link current;
+public class LinkedList<E>{
+	public Link<E> first;
+	private Link<E> current;
 	
 	public LinkedList(){
 		first = null;
 	}
 	
 	public void addElement(){
-		Link link = new Link();
+		Link<E> link = new Link<E>();
 		link.next = first;
 		first = link;
 	}
 	
-	public char getElement(int index){
+	public E getElement(int index){
 		current = first;
 		for(int a = 0; a < index; a++){
 			current = current.next;
@@ -23,7 +23,7 @@ public class LinkedList {
 		return current.getElement();
 	}
 	
-	public void setSpecificElement(int index, char element){
+	public void setSpecificElement(int index, E element){
 		current = first;
 		for(int a = 0; a < index; a++){
 			current = current.next;

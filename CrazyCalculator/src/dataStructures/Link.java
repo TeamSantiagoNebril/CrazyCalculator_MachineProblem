@@ -1,15 +1,21 @@
 package dataStructures;
 
 
-public class Link {
-	private char element;
-	public Link next;
+public class Link<E> {
+	private E element;
+	public Link<E> next;
 
-	public char getElement(){
+	
+	public Link()
+	{
+		
+	}
+	
+	public E getElement(){
 		return element;
 	}
 	
-	public void setElement(char element){
+	public void setElement(E element){
 		this.element = element;
 	}
 }
