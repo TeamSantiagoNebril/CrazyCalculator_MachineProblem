@@ -185,8 +185,7 @@ public class CrazyCalculatorGUI extends JFrame{
 						textField.setText(temp);
 					}else if(a == 19){
 						Calculator calc = new Calculator();
-						
-						
+							
 						//aerol, equals na adi hihi
 					}
 					repaint();

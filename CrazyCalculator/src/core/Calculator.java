@@ -9,7 +9,7 @@ public class Calculator{
 	
 	public Calculator()
 	{
-		//stack = new Stack<String>(length);
+		
 	}
 	
 	public int evaluate(String input)
