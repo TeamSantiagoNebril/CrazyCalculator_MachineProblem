@@ -10,6 +10,7 @@ public class Queue<E> {
 	private int rear;
 	private int nItems;
 	
+	// ello
 	
 	public Queue(int numberOfElements) // constructor
 	{
