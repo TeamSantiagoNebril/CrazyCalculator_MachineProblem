@@ -20,6 +20,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseMotionAdapter;
 import javax.swing.border.Border;
 
+import core.Calculator;
+
 public class CrazyCalculatorGUI extends JFrame{
 	/**
 	 * 
@@ -34,8 +36,6 @@ public class CrazyCalculatorGUI extends JFrame{
 	private JPanel keyPad;
 	private JPanel keys[] = new JPanel[20];
 	private JLabel keysLabel[] = new JLabel[20];
- 	/*private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*","4", "5", "6", "-", "1", "2",
- 									"3", "+","(", "0", ")", "="};*/
  	private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
@@ -68,6 +68,10 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		});
 		
+		JLabel title = new JLabel("                                   Crazy Calculator");
+		title.setFont(new Font("Arial", Font.BOLD, 12));
+		title.setForeground(Color.WHITE);
+		customMenu.add(title);//try
 		customMenu.add(closeButton, BorderLayout.EAST);
 		customMenu.setBorderPainted(false);
 		customMenu.setOpaque(false);
@@ -98,10 +102,12 @@ public class CrazyCalculatorGUI extends JFrame{
 		textField.setText("");
 		textField.setEditable(false);
 		textField.setHorizontalAlignment(SwingConstants.RIGHT);
-		textField.setForeground(Color.WHITE);
+		//textField.setForeground(Color.WHITE);
 		textField.setFont(new Font("Arial", Font.PLAIN, 20));
-		textField.setBackground(new Color(0, 0, 0, (float)0.03));
-		textField.setBorder(border);
+		//textField.setBackground(Color.WHITE, 0.03f);
+		textField.setBackground(new Color(1.0f, 1, 1, (float)1.0));
+		//textField.setBackground(new Color(0, 0, 0, (float)0.03));
+		//textField.setBorder(border);
 		textField.setSize(280, 50);
 		textField.setLocation(10, 20);
 		
@@ -178,20 +184,14 @@ public class CrazyCalculatorGUI extends JFrame{
 						}
 						textField.setText(temp);
 					}else if(a == 19){
+						Calculator calc = new Calculator();
+						
+						
 						//aerol, equals na adi hihi
 					}
 					repaint();
 				}
 			}
 		}
-	}
-	
-	public static void main(String args[]){
-		CrazyCalculatorGUI gui = new CrazyCalculatorGUI();
-		gui.setSize(300, 450);
-		gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		gui.setUndecorated(true);
-		gui.setBackground(new Color((float)0, (float)0, (float)0, (float)0.70));
-		gui.setVisible(true);
 	}
 }

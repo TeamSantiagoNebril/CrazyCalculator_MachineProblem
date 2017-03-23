@@ -4,74 +4,73 @@ import runtimeException.QueueOutOfBoundsException;
 
 public class Queue<E> {
 	
-	private PseudoArray<E> array;
-	private int front = -1, rear = -1;
 	private int limit;
+	private PseudoArray<E> array;
+	private int front;
+	private int rear;
+	private int nItems;
 	
-	public Queue(int numberOfElements)
+	
+	public Queue(int numberOfElements) // constructor
 	{
 		limit = numberOfElements;
-		array = new PseudoArray<E>(numberOfElements );
-		
+		array = new PseudoArray<E>(numberOfElements);
+		front = 0;
+		rear = -1;
+		nItems = 0;
 	}
 	
-	public void enqueue(E newElement)
+	public void enqueue(E newElement) // put item at rear of queue
 	{
-
-		if(isFull()){
-            throw new QueueOutOfBoundsException("QueueOutOfBounds: Overflow");
-        }else{
-        	rear = (rear + 1) % limit;
-            array.set(rear, newElement);
-            if(front == -1)
-            {
-            	front = 0;
-            }
-            
-        }
+		if(!isFull())
+		{
+			if(rear == limit-1) // deal with wraparound
+				rear = -1;
+			array.set(++rear, newElement); // increment rear and insert
+			nItems++; // one more item
+		}
+		else
+		{
+			throw new QueueOutOfBoundsException("QueueOutOfBounds: Overflow");
+		}
 	}
 	
-	public E dequeue()
+	public E dequeue() // take item from front of queue
 	{
-		if(isEmpty())
+		if(!isEmpty())
+		{
+			if(front == limit) // deal with wraparound
+				front = 0;
+			nItems--; // one less item
+			return array.get(front++);
+		}
+		else
 		{
 			 throw new QueueOutOfBoundsException("QueueOutOfBounds: Underflow");
-		}			
-		E deletedElement = array.get(front);
-		if(front == rear)
-		{
-			front = rear = -1;
 		}
-		else
-		{
-			front = (front + 1) & limit;
-		}
-		return deletedElement;
+			
 		
 	}
 	
-	public boolean isEmpty()
+	public E peekFront() // peek at front of queue
 	{
-		if(front == -1)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return array.get(front);
 	}
 	
-	public boolean isFull()
+	public boolean isEmpty() // true if queue is empty
 	{
-		if((rear + 1) % limit == front)
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return (nItems == 0);
 	}
+	
+	public boolean isFull() // true if queue is full
+	{
+		return (nItems==limit);
+	}
+	
+	public int size() // number of items in queue
+	{
+		return nItems;
+	}
+	
 	
 }
