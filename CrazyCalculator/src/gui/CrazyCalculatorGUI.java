@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -26,6 +27,13 @@ public class CrazyCalculatorGUI extends JFrame{
 	/**
 	 * 
 	 */
+	
+	private boolean flagOperator = false;
+	private boolean closeParenthesis = false;
+	private int openParenthesis = 1;
+	
+	
+	
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private JMenuBar customMenu;
@@ -174,20 +182,90 @@ public class CrazyCalculatorGUI extends JFrame{
 			for(int a = 0; a < 20; a++){
 				if(e.getSource() == keys[a]){
 					if(a != 1 && a != 2 && a != 19 && textField.getText().length() < 25){ //for character input
-						textField.setText(textField.getText() + characters[a]);
+						if( Character.isDigit(characters[a].charAt(0)))
+						{
+							if((!textField.getText().equals("") && textField.getText().charAt(textField.getText().length() - 1) != ')')
+							    || textField.getText().equals(""))
+							{
+								
+							
+							textField.setText(textField.getText() + characters[a]);
+							if((!textField.getText().equals("")) && Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)))
+							{
+								flagOperator = true;
+							}
+							}
+							
+						}
+						else if(a == 17) //open parenthesis
+						{
+							if(((textField.getText().equals("")) || !Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) && textField.getText().charAt(textField.getText().length() - 1) != ')'))
+							{
+								textField.setText(textField.getText() + characters[a]);
+								openParenthesis++;
+								closeParenthesis = true;
+							}
+							
+							
+						}
+						else if(a == 18)
+						{
+							if(openParenthesis > 1 && closeParenthesis == true && (Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) || textField.getText().charAt(textField.getText().length() - 1) == ')'))
+							{
+								textField.setText(textField.getText() + characters[a]);
+								openParenthesis--;
+								if(openParenthesis == 1)
+								{
+									closeParenthesis = false;
+								}
+							}
+						}
+						else
+						{
+							if(flagOperator)
+							{
+								textField.setText(textField.getText() + characters[a]);
+								flagOperator = false;
+							}
+						}
+						
+						
 					}else if(a == 1){ //clear all
 						textField.setText("");
+						flagOperator = false;
+						closeParenthesis = false;
+						openParenthesis = 1;
+
 					}else if(a == 2){ //delete
+						if((!textField.getText().equals("")) && Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)))
+						{
+							flagOperator = true;
+						}
+						if((!textField.getText().equals("")) && textField.getText().charAt(textField.getText().length() - 1) == ')')
+						{
+							openParenthesis++;
+							closeParenthesis = true;
+						}
 						String temp = "";
 						for(int b = 0; b < textField.getText().length() - 1; b++){
 							temp += textField.getText().charAt(b);
 						}
 						textField.setText(temp);
-					}else if(a == 19){
-						Calculator calc = new Calculator();
-						
-						
-						//aerol, equals na adi hihi
+					}else if(a == 19){ //equals button
+						if( (!textField.getText().equals("")  && !Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) 
+								&& (textField.getText().charAt(textField.getText().length() - 1) != ')' )
+								|| openParenthesis > 1))
+						{
+							JOptionPane.showMessageDialog(null,
+							        "Invalid Input!",
+							        "Invalid Input",
+							        JOptionPane.ERROR_MESSAGE);
+							System.out.println(openParenthesis);
+						}
+						else
+						{
+							
+						}
 					}
 					repaint();
 				}
