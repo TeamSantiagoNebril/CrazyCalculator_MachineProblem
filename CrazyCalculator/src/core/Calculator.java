@@ -12,9 +12,11 @@ public class Calculator{
 		
 	}
 	
-	public int evaluate(String input)
+	public double evaluate(String input)
 	{
-		return 0;
+		double answer;
+		answer = evaluatePostfix(translateInfixToPostfix(input));
+		return answer;
 	}
 	
 	public String translateInfixToPostfix(String input)
@@ -95,10 +97,58 @@ public class Calculator{
 		return output;
 	}
 	
-	public int evaluatePostfix(String Postfix)
+	public double evaluatePostfix(String postfix)
 	{
-		
-		return 0;
+		double answer = 0;
+		String characters = "";
+		stack = new Stack<String>(postfix.length());
+		for(int a = 0; a < postfix.length(); a++){
+			answer = 0;
+			if(isNumeric(postfix.charAt(a) + "")){
+				characters += postfix.charAt(a);
+				continue;
+			}
+			if(isNumeric(characters)){
+				stack.push(characters);
+				characters = "";
+			}else if(isOperator(postfix.charAt(a) + "")){
+				if(postfix.charAt(a) == '+'){
+					double temp = Double.parseDouble(stack.pop());
+					answer = Double.parseDouble(stack.pop()) + temp;  
+					if(a != postfix.length() - 1){
+						stack.push(String.valueOf(answer));
+					}
+				}else if(postfix.charAt(a) == '-'){
+					double temp = Double.parseDouble(stack.pop());
+					answer = Double.parseDouble(stack.pop()) - temp;  
+					if(a != postfix.length() - 1){
+						stack.push(String.valueOf(answer));
+					}
+				}else if(postfix.charAt(a) == '*'){
+					double temp = Double.parseDouble(stack.pop());
+					answer = Double.parseDouble(stack.pop()) * temp;  
+					if(a != postfix.length() - 1){
+						stack.push(String.valueOf(answer));
+					}
+				}else if(postfix.charAt(a) == '/'){
+					double temp = Double.parseDouble(stack.pop());
+					answer = Double.parseDouble(stack.pop())/temp; 
+					if(a != postfix.length() - 1){
+						stack.push(String.valueOf(answer));
+					}
+				}
+			}
+		}
+		return answer;
+	}
+	
+	public Boolean isNumeric(String string){
+		try{
+			Double.parseDouble(string);
+		}catch(NumberFormatException e){
+			return false;
+		}
+		return true;
 	}
 	
 	public boolean isOperator(String input)

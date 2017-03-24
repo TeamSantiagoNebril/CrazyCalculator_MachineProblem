@@ -10,7 +10,6 @@ public class Queue<E> {
 	private int rear;
 	private int nItems;
 	
-	
 	public Queue(int numberOfElements) // constructor
 	{
 		limit = numberOfElements;
@@ -64,7 +63,7 @@ public class Queue<E> {
 	
 	public boolean isFull() // true if queue is full
 	{
-		return (nItems==limit);
+		return (nItems == limit);
 	}
 	
 	public int size() // number of items in queue
