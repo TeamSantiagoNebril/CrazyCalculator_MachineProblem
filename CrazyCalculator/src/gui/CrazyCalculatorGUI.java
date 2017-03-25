@@ -36,6 +36,8 @@ public class CrazyCalculatorGUI extends JFrame{
 	
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
+	private JPanel mainCenter;
+	private JPanel subPanel;
 	private JMenuBar customMenu;
 	private JButton closeButton;
 	private int pX;
@@ -43,13 +45,22 @@ public class CrazyCalculatorGUI extends JFrame{
 	private JTextField textField;
 	private JPanel keyPad;
 	private JPanel keys[] = new JPanel[20];
+	private Calculator calculator;
 	private JLabel keysLabel[] = new JLabel[20];
- 	private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
+	private Boolean showSubPanel = true;
+	private Boolean clear = false;
+ 	private String characters[] = {"Snapshot", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
+		this.setLayout(new GridLayout(1, 2));
+		calculator = new Calculator();
 		mainPanel = new JPanel();
-		mainPanel.setLayout(null);
-		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.0));
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
+		
+		subPanel = new JPanel();
+		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
+		subPanel.setVisible(false);
 		
 		customMenu = new JMenuBar();
 		customMenu.setLayout(new BorderLayout());
@@ -73,6 +84,7 @@ public class CrazyCalculatorGUI extends JFrame{
 			public void mouseExited(MouseEvent e){
 				closeButton.setOpaque(false);
 				closeButton.setBackground(new Color(0, 0, 0, 0));
+				repaint();
 			}
 		});
 		
@@ -104,6 +116,11 @@ public class CrazyCalculatorGUI extends JFrame{
             }
         });
 		
+		mainCenter = new JPanel();
+		mainPanel.add(mainCenter, BorderLayout.CENTER);
+		mainCenter.setBackground(new Color(0, 0, 0, 0));
+		mainCenter.setLayout(null);
+		
 		Border border;
 		border = BorderFactory.createLoweredBevelBorder();
 		textField = new JTextField();
@@ -129,11 +146,15 @@ public class CrazyCalculatorGUI extends JFrame{
 		for(int a = 0; a < 20; a++){
 			keys[a] = new JPanel();
 			keys[a].setLayout(new GridBagLayout());
-			if(a != 0){
-				keys[a].addMouseListener(handler);
-			}
+			
+			keys[a].addMouseListener(handler);
+			
 			keysLabel[a] = new JLabel(characters[a]);
-			keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 20));
+			if(a == 0){
+				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 15));
+			}else{
+				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 20));
+			}
 			keysLabel[a].setForeground(Color.WHITE);
 			keys[a].add(keysLabel[a], SwingConstants.CENTER);
 			keyPad.add(keys[a]);
@@ -144,11 +165,12 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		}
 		
-		mainPanel.add(textField);
-		mainPanel.add(keyPad);
+		mainCenter.add(textField);
+		mainCenter.add(keyPad);
 		
-		setJMenuBar(customMenu);
+		mainPanel.add(customMenu, BorderLayout.NORTH);
 		add(mainPanel);
+		add(subPanel);
 	}
 
 	public class MouseHandler extends MouseAdapter{
@@ -179,9 +201,14 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		}
 		public void mouseClicked(MouseEvent e){
+			if(clear){
+				textField.setText("");
+				clear = false;
+			}
 			for(int a = 0; a < 20; a++){
+				
 				if(e.getSource() == keys[a]){
-					if(a != 1 && a != 2 && a != 19 && textField.getText().length() < 25){ //for character input
+					if(a != 0 && a != 1 && a != 2 && a != 19 && textField.getText().length() < 25){ //for character input
 						if( Character.isDigit(characters[a].charAt(0)))
 						{
 							if((!textField.getText().equals("") && textField.getText().charAt(textField.getText().length() - 1) != ')')
@@ -262,9 +289,24 @@ public class CrazyCalculatorGUI extends JFrame{
 							        JOptionPane.ERROR_MESSAGE);
 							System.out.println(openParenthesis);
 						}
-						else
-						{
-							
+					
+						double temp = calculator.evaluate(textField.getText());
+						if(temp - (int) temp == 0){
+							textField.setText(String.valueOf((int) temp));
+						}else{
+							textField.setText(String.valueOf(temp));
+						}
+						clear = true;
+						
+						
+					}else if(a == 0){
+						
+						if(showSubPanel){
+							subPanel.setVisible(true);
+							showSubPanel = false;
+						}else{
+							subPanel.setVisible(false);
+							showSubPanel = true;
 						}
 					}
 					repaint();
