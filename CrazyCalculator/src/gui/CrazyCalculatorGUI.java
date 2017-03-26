@@ -55,13 +55,16 @@ public class CrazyCalculatorGUI extends JFrame{
  	private String characters[] = {"Snapshot", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
-		this.setLayout(new GridLayout(1, 2));
+		this.setLayout(null);
 		calculator = new Calculator();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
-		
+		mainPanel.setLocation(0,0);
+		mainPanel.setSize(300, 450);
 		subPanel = new JPanel();
+		subPanel.setLocation(300, 0);
+		subPanel.setSize(500, 450);
 		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
 		subPanel.setVisible(false);
 		

@@ -16,12 +16,11 @@ public class Main
   {
  
     CrazyCalculatorGUI gui = new CrazyCalculatorGUI();
- 
-    gui.setSize(300, 450);
+    gui.setSize(800, 450);
     gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gui.setUndecorated(true);
     gui.setLocationRelativeTo(null);
-    gui.setBackground(new Color((float)0, (float)0, (float)0, (float)0.70));
+    gui.setBackground(new Color(0, 0, 0, 0));
     gui.setVisible(true);
   }
  
