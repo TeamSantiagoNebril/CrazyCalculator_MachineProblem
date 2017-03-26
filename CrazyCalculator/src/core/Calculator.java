@@ -99,6 +99,7 @@ public class Calculator{
 	
 	public double evaluatePostfix(String postfix)
 	{
+		Boolean operation = false;
 		double answer = 0;
 		String characters = "";
 		stack = new Stack<String>(postfix.length());
@@ -112,6 +113,7 @@ public class Calculator{
 				stack.push(characters);
 				characters = "";
 			}else if(isOperator(postfix.charAt(a) + "")){
+				operation = true;
 				if(postfix.charAt(a) == '+'){
 					double temp = Double.parseDouble(stack.pop());
 					answer = Double.parseDouble(stack.pop()) + temp;  
@@ -138,6 +140,10 @@ public class Calculator{
 					}
 				}
 			}
+			
+		}
+		if(!operation){
+			answer = Double.parseDouble(stack.pop());
 		}
 		return answer;
 	}

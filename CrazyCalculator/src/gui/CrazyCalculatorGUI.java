@@ -288,13 +288,14 @@ public class CrazyCalculatorGUI extends JFrame{
 							        "Invalid Input",
 							        JOptionPane.ERROR_MESSAGE);
 							System.out.println(openParenthesis);
-						}
-					
-						double temp = calculator.evaluate(textField.getText());
-						if(temp - (int) temp == 0){
-							textField.setText(String.valueOf((int) temp));
 						}else{
-							textField.setText(String.valueOf(temp));
+					
+							double temp = calculator.evaluate(textField.getText());
+							if(temp - (int) temp == 0){
+								textField.setText(String.valueOf((int) temp));
+							}else{
+								textField.setText(String.valueOf(temp));
+							}
 						}
 						clear = true;
 						
@@ -309,7 +310,6 @@ public class CrazyCalculatorGUI extends JFrame{
 							showSubPanel = true;
 						}
 					}
-					repaint();
 				}
 			}
 		}
