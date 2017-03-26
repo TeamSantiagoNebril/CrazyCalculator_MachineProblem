@@ -19,6 +19,9 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 import javax.swing.border.Border;
 
 import core.Calculator;
@@ -294,7 +297,10 @@ public class CrazyCalculatorGUI extends JFrame{
 							if(temp - (int) temp == 0){
 								textField.setText(String.valueOf((int) temp));
 							}else{
-								textField.setText(String.valueOf(temp));
+								BigDecimal d = new BigDecimal(temp);
+								int integralDigits = d.toBigInteger().toString().length();
+								d = d.setScale(20-integralDigits, RoundingMode.HALF_EVEN);
+								textField.setText(String.valueOf(d));
 							}
 						}
 						clear = true;
