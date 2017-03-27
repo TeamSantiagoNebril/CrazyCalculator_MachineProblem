@@ -3,6 +3,7 @@ package gui;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import javax.swing.JTextField;
@@ -19,12 +20,15 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import javax.swing.border.Border;
 
 import core.Calculator;
+import staticHelper.Helper;
 
 public class CrazyCalculatorGUI extends JFrame{
 	/**
@@ -35,12 +39,10 @@ public class CrazyCalculatorGUI extends JFrame{
 	private boolean closeParenthesis = false;
 	private int openParenthesis = 1;
 	
-	
-	
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private JPanel mainCenter;
-	private JPanel subPanel;
+	private SnapShots subPanel;
 	private JMenuBar customMenu;
 	private JButton closeButton;
 	private int pX;
@@ -59,21 +61,44 @@ public class CrazyCalculatorGUI extends JFrame{
 		calculator = new Calculator();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
-		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
+		//mainPanel.setOpaque(true);
+		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.80));
 		mainPanel.setLocation(0,0);
 		mainPanel.setSize(300, 450);
-		subPanel = new JPanel();
-		subPanel.setLocation(300, 0);
-		subPanel.setSize(500, 450);
-		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
-		subPanel.setVisible(false);
+		subPanel = new SnapShots();
+		//subPanel.setLayout(new BorderLayout());
+
+/********************Under Construction**********************************/
+		JMenuBar subPanelcustomMenu = new JMenuBar();
+		subPanelcustomMenu.setLayout(new BorderLayout());
+/*********Under Further Construction***************/
+
+		Font font = Helper.createFromExternalFont("external\\Fonts\\pdark.ttf", 20f);
+		Font fontKeys = Helper.createFromExternalFont("external\\Fonts\\VIDEOPHREAK.ttf", 18f);
 		
+/*********Under Further Construction***************/
+		subPanelcustomMenu.setBorderPainted(false);
+		//subPanelcustomMenu.setOpaque(false);
+		subPanelcustomMenu.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.00));
+		JLabel subPanelTitle = new JLabel("                  Snapshots");
+		//subPanelTitle.setFont(new Font("Arial", Font.BOLD, 20));
+		subPanelTitle.setFont(font);
+		subPanelTitle.setForeground(Color.ORANGE);
+		subPanelcustomMenu.add(subPanelTitle);//try
+		subPanel.add(subPanelcustomMenu, BorderLayout.NORTH);
+/********************Under Construction**********************************/
+
+		/*subPanel.setLocation(300, 0);
+		subPanel.setSize(500, 450);
+		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) .80));
+		subPanel.setVisible(false);*/
+		//setBackground(new Color((float)0,(float) 0, (float)0,(float) 1.00));
 		customMenu = new JMenuBar();
 		customMenu.setLayout(new BorderLayout());
 		
 		closeButton = new JButton("X");
 		closeButton.setFont(new Font("Arial", Font.BOLD, 17));
-		closeButton.setForeground(Color.WHITE);
+		closeButton.setForeground(Color.BLUE);
 		closeButton.setFocusPainted(false);
 		closeButton.setBackground(new Color(0, 0, 0, 0));
 		closeButton.setBorderPainted(false);
@@ -94,13 +119,17 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		});
 		
-		JLabel title = new JLabel("                                   Crazy Calculator");
-		title.setFont(new Font("Arial", Font.BOLD, 12));
-		title.setForeground(Color.WHITE);
+		JLabel title = new JLabel("        Crazy Calculator");
+		Font titleFont = font.deriveFont(14f);
+		//title.setFont(new Font("Arial", Font.BOLD, 12));
+		
+		title.setFont(titleFont);
+		title.setForeground(Color.BLUE);
 		customMenu.add(title);//try
 		customMenu.add(closeButton, BorderLayout.EAST);
 		customMenu.setBorderPainted(false);
-		customMenu.setOpaque(false);
+		//customMenu.setOpaque(false);
+		customMenu.setBackground( new Color((float)0,(float) 0, (float)0,(float) 1.0));
 		customMenu.addMouseListener(new MouseAdapter() {
 	        public void mousePressed(MouseEvent me) {
 	            pX = me.getX();
@@ -124,7 +153,7 @@ public class CrazyCalculatorGUI extends JFrame{
 		
 		mainCenter = new JPanel();
 		mainPanel.add(mainCenter, BorderLayout.CENTER);
-		mainCenter.setBackground(new Color(0, 0, 0, 0));
+		mainCenter.setBackground(new Color(0, 0, 0, 0.60f));
 		mainCenter.setLayout(null);
 		
 		Border border;
@@ -133,10 +162,10 @@ public class CrazyCalculatorGUI extends JFrame{
 		textField.setText("");
 		textField.setEditable(false);
 		textField.setHorizontalAlignment(SwingConstants.RIGHT);
-		//textField.setForeground(Color.WHITE);
-		textField.setFont(new Font("Arial", Font.PLAIN, 20));
-		//textField.setBackground(Color.WHITE, 0.03f);
-		textField.setBackground(new Color(1.0f, 1, 1, (float)1.0));
+		textField.setForeground(Color.ORANGE);
+		textField.setFont(new Font("Roboto", Font.PLAIN, 20));
+		textField.setBorder(null);
+		textField.setBackground(new Color(0.0f, 0.0f, 0f, (float)1.0));
 		//textField.setBackground(new Color(0, 0, 0, (float)0.03));
 		//textField.setBorder(border);
 		textField.setSize(280, 50);
@@ -152,16 +181,20 @@ public class CrazyCalculatorGUI extends JFrame{
 		for(int a = 0; a < 20; a++){
 			keys[a] = new JPanel();
 			keys[a].setLayout(new GridBagLayout());
+			//keys[a].setBackground(new Color(0.0f, 0.0f, 0f, (float)0.9));
 			
 			keys[a].addMouseListener(handler);
 			
 			keysLabel[a] = new JLabel(characters[a]);
 			if(a == 0){
-				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 15));
+				//keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 15));
+				keysLabel[a].setFont(fontKeys.deriveFont(12f));
 			}else{
-				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 20));
+				//keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 20));
+				keysLabel[a].setFont(fontKeys);
 			}
-			keysLabel[a].setForeground(Color.WHITE);
+			//keysLabel[a].setForeground(Color.WHITE);
+			keysLabel[a].setForeground(Color.BLUE);
 			keys[a].add(keysLabel[a], SwingConstants.CENTER);
 			keyPad.add(keys[a]);
 			if(a == 19){
@@ -187,7 +220,7 @@ public class CrazyCalculatorGUI extends JFrame{
 						keys[a].setBackground(new Color(255, 0, 0, 175));
 					}else
 					{
-						keys[a].setBackground(new Color(0, 0, 0, (float)0.5));
+						keys[a].setBackground(new Color(0, 0, 0, (float)0.8));
 					}
 					repaint();
 				}
@@ -306,7 +339,7 @@ public class CrazyCalculatorGUI extends JFrame{
 								textField.setText(String.valueOf(d));
 							}
 						}
-						clear = true;
+						//clear = true;
 						
 						
 					}else if(a == 0){

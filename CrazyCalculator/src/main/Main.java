@@ -20,7 +20,7 @@ public class Main
     gui.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     gui.setUndecorated(true);
     gui.setLocationRelativeTo(null);
-    gui.setBackground(new Color(0, 0, 0, 0));
+    gui.setBackground(new Color((float)0, (float)0, (float)0, (float)0.00));
     gui.setVisible(true);
   }
  
