@@ -51,7 +51,7 @@ public class CrazyCalculatorGUI extends JFrame{
 	private Calculator calculator;
 	private JLabel keysLabel[] = new JLabel[20];
 	private Boolean showSubPanel = true;
-	private Boolean clear = false;
+	//private Boolean clear = false;
  	private String characters[] = {"Snapshot", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
@@ -207,10 +207,10 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		}
 		public void mouseClicked(MouseEvent e){
-			if(clear){
+		/*	if(clear){
 				textField.setText("");
 				clear = false;
-			}
+			}*/
 			for(int a = 0; a < 20; a++){
 				
 				if(e.getSource() == keys[a]){
@@ -243,7 +243,7 @@ public class CrazyCalculatorGUI extends JFrame{
 						}
 						else if(a == 18)
 						{
-							if(openParenthesis > 1 && closeParenthesis == true && (Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) || textField.getText().charAt(textField.getText().length() - 1) == ')'))
+							if(openParenthesis > 1 && closeParenthesis == true && (Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) || ( /*!textField.getText().equals("") &&*/ textField.getText().charAt(textField.getText().length() - 1) == ')')))
 							{
 								textField.setText(textField.getText() + characters[a]);
 								openParenthesis--;
@@ -287,7 +287,7 @@ public class CrazyCalculatorGUI extends JFrame{
 					}else if(a == 19){ //equals button
 						if( (!textField.getText().equals("")  && !Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) 
 								&& (textField.getText().charAt(textField.getText().length() - 1) != ')' )
-								|| openParenthesis > 1))
+								|| openParenthesis > 1)) // Needs improvement
 						{
 							JOptionPane.showMessageDialog(null,
 							        "Invalid Input!",
@@ -295,7 +295,7 @@ public class CrazyCalculatorGUI extends JFrame{
 							        JOptionPane.ERROR_MESSAGE);
 							System.out.println(openParenthesis);
 						}else{
-					
+							//calculator = new Calculator();
 							double temp = calculator.evaluate(textField.getText());
 							if(temp - (int) temp == 0){
 								textField.setText(String.valueOf((int) temp));
@@ -306,7 +306,7 @@ public class CrazyCalculatorGUI extends JFrame{
 								textField.setText(String.valueOf(d));
 							}
 						}
-						clear = true;
+						//clear = true;
 						
 						
 					}else if(a == 0){
