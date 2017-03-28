@@ -111,19 +111,28 @@ public class Calculator{
 			element = "";
 			
 		}
-		while(!stack.isEmpty())
+		if(!stack.isEmpty())
 		{
-			output += stack.pop();
-			if(i == input.length() && endReadFlag)
+
+			while(!stack.isEmpty())
 			{
-				read = "END";
-			}
-			else
-			{
+				output += stack.pop();
+				if(i == input.length() && endReadFlag)
+				{
+					read = "END";
+				}
+				else
+				{
 				
+				}
+				printTranslationInCMD( read, parse, input);
 			}
-			printTranslationInCMD( read, parse, input);
 		}
+		else
+		{
+			printTranslationInCMD( "END", parse, input);
+		}
+		
 		return output;
 	}
 	
