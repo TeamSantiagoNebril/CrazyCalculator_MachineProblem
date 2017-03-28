@@ -6,6 +6,7 @@ public class Calculator{
 
 	
 	private Stack<String> stack;
+	private String output;
 	
 	public Calculator()
 	{
@@ -19,21 +20,27 @@ public class Calculator{
 		return answer;
 	}
 	
+	boolean endReadFlag = true;
 	public String translateInfixToPostfix(String input)
 	{
+		int i, num;
 		stack = new Stack<String>(input.length());
-		String output = "";
+		output = "";
 		String element = "";
-		for(int i = 0; i < input.length(); i++)
+		String read = "", parse = "";
+		for( i = 0; i < input.length(); i++)
 		{
+			num = i;
 			if(Character.isDigit(input.charAt(i))) //character is number
 			{
+				num = i;
 				while( (i < input.length()) && (Character.isDigit(input.charAt(i))))
 				{
 					element += input.charAt(i);
 					i++;
 				}
 				output += (element + " ");
+				
 				i--;
 			}
 			else if(input.charAt(i) == '(' ) //character is open parenthesis
@@ -88,13 +95,88 @@ public class Calculator{
 					stack.push(input.charAt(i) + "");
 				}
 			}
+			/************************************************************/
+			if(num  == i)
+			{
+				read = input.charAt(i) + "";
+			}
+			else
+			{
+				read = input.substring(num, i+1);
+			}
+			parse = input.substring(0, i+1);
+			
+			printTranslationInCMD( read, parse, input);
+			/************************************************************/
 			element = "";
+			
 		}
 		while(!stack.isEmpty())
 		{
 			output += stack.pop();
+			if(i == input.length() && endReadFlag)
+			{
+				read = "END";
+			}
+			else
+			{
+				
+			}
+			printTranslationInCMD( read, parse, input);
 		}
 		return output;
+	}
+	
+	private boolean flag2 = true;
+	public void printTranslationInCMD(String read , String parse, String input)
+	{
+		if(flag2)
+		{
+			System.out.println("Translation:");
+			System.out.println("|" + generateColumn("Read", input.length()) + "|" +
+									 generateColumn("Parsed", input.length()) + "|" +
+									 generateColumn("Written", input.length()) + "|" +
+									 generateColumn("Stack", input.length()) + "|") ;
+			flag2 = false;
+		}
+		
+		Stack<String> temp = new Stack<String>(input.length());
+		String stackElements = "";
+		while(!stack.isEmpty())
+		{
+			String poppedElement = stack.pop();
+			temp.push(poppedElement);
+			stackElements += poppedElement;
+		}
+		while(!temp.isEmpty())
+		{
+			stack.push(temp.pop());
+		}
+		
+		
+		System.out.println("|" + generateColumn(read, input.length()) + "|" +
+				 				 generateColumn(parse, input.length()) + "|" +
+				 				 generateColumn(output, input.length()) + "|" +
+				 				 generateColumn(stackElements, input.length()) + "|") ;
+		
+	}
+	
+	public String generateColumn(String input, int length)
+	{
+		String space = "";
+		int size = length;
+		
+		if(length < 7)
+		{
+			size = 7;
+		}
+		
+		for(int i = input.length(); i < size; i++)
+		{
+			space += " ";
+		}
+		space = input + space;
+		return space;
 	}
 	
 	public double evaluatePostfix(String postfix)
