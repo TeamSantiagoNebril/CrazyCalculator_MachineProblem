@@ -23,6 +23,8 @@ public class Calculator{
 	boolean endReadFlag = true;
 	public String translateInfixToPostfix(String input)
 	{
+		System.out.println("\n\nExpression: " + input);
+		System.out.println("Translation:");
 		int i, num;
 		stack = new Stack<String>(input.length());
 		output = "";
@@ -111,32 +113,42 @@ public class Calculator{
 			element = "";
 			
 		}
-		while(!stack.isEmpty())
+		if(!stack.isEmpty())
 		{
-			output += stack.pop();
-			if(i == input.length() && endReadFlag)
+
+			while(!stack.isEmpty())
 			{
-				read = "END";
-			}
-			else
-			{
+				output += stack.pop();
+				if(i == input.length() && endReadFlag)
+				{
+					read = "END";
+				}
+				else
+				{
 				
+				}
+				printTranslationInCMD( read, parse, input);
 			}
-			printTranslationInCMD( read, parse, input);
 		}
+		else
+		{
+			printTranslationInCMD( "END", parse, input);
+		}
+		
 		return output;
 	}
 	
 	private boolean flag2 = true;
 	public void printTranslationInCMD(String read , String parse, String input)
 	{
+		int inputLengthWithSpaces = input.length() + (input.length()/2);
 		if(flag2)
 		{
-			System.out.println("Translation:");
-			System.out.println("|" + generateColumn("Read", input.length()) + "|" +
-									 generateColumn("Parsed", input.length()) + "|" +
-									 generateColumn("Written", input.length()) + "|" +
-									 generateColumn("Stack", input.length()) + "|") ;
+			
+			System.out.println("|" + generateColumn("Read", inputLengthWithSpaces) + "|" +
+									 generateColumn("Parsed", inputLengthWithSpaces) + "|" +
+									 generateColumn("Written", inputLengthWithSpaces) + "|" +
+									 generateColumn("Stack", inputLengthWithSpaces) + "|") ;
 			flag2 = false;
 		}
 		
@@ -154,10 +166,10 @@ public class Calculator{
 		}
 		
 		
-		System.out.println("|" + generateColumn(read, input.length()) + "|" +
-				 				 generateColumn(parse, input.length()) + "|" +
-				 				 generateColumn(output, input.length()) + "|" +
-				 				 generateColumn(stackElements, input.length()) + "|") ;
+		System.out.println("|" + generateColumn(read, inputLengthWithSpaces) + "|" +
+				 				 generateColumn(parse, inputLengthWithSpaces) + "|" +
+				 				 generateColumn(output, inputLengthWithSpaces) + "|" +
+				 				 generateColumn(stackElements, inputLengthWithSpaces) + "|") ;
 		
 	}
 	
