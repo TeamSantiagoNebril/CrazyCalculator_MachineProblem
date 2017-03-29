@@ -7,7 +7,7 @@ public class Calculator{
 	
 	private Stack<String> stack;
 	private String output;
-	
+	private Boolean header = true;
 	public Calculator()
 	{
 		
@@ -54,7 +54,7 @@ public class Calculator{
 					element = stack.pop();
 					if(!element.equals("("))
 					{
-						output += element;
+						output += element + " ";
 					}
 					else
 					{
@@ -87,7 +87,7 @@ public class Calculator{
 							}
 							else if(analyzePrecedence(element) >= analyzePrecedence(input.charAt(i) + ""))
 							{
-								output += element;
+								output += element + " ";
 							}
 						}
 						
@@ -190,9 +190,13 @@ public class Calculator{
 	
 	public double evaluatePostfix(String postfix)
 	{
-		Boolean operation = false;
+		System.out.println("Postfix: " + postfix);
+		
+		header = true;
+		System.out.println("\n\nEvaluation: ");
 		double answer = 0;
 		String characters = "";
+		String parsed = "";
 		stack = new Stack<String>(postfix.length());
 		for(int a = 0; a < postfix.length(); a++){
 			answer = 0;
@@ -200,43 +204,89 @@ public class Calculator{
 				characters += postfix.charAt(a);
 				continue;
 			}
+			
+			
 			if(isNumeric(characters)){
 				stack.push(characters);
+				parsed += characters + " ";
+				printEvaluation(characters, parsed, postfix);
 				characters = "";
+				
 			}else if(isOperator(postfix.charAt(a) + "")){
-				operation = true;
+				parsed += postfix.charAt(a) + " ";
+				printEvaluation(postfix.charAt(a) + "", parsed, postfix);
 				if(postfix.charAt(a) == '+'){
 					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop()) + temp;  
-					if(a != postfix.length() - 1){
+					answer = Double.parseDouble(stack.pop()) + temp; 
+					if(answer - (int) answer == 0){
+						stack.push(String.valueOf((int)answer));
+					}else{
 						stack.push(String.valueOf(answer));
 					}
+					
 				}else if(postfix.charAt(a) == '-'){
 					double temp = Double.parseDouble(stack.pop());
 					answer = Double.parseDouble(stack.pop()) - temp;  
-					if(a != postfix.length() - 1){
+					if(answer - (int) answer == 0){
+						stack.push(String.valueOf((int)answer));
+					}else{
 						stack.push(String.valueOf(answer));
 					}
+					
 				}else if(postfix.charAt(a) == '*'){
 					double temp = Double.parseDouble(stack.pop());
 					answer = Double.parseDouble(stack.pop()) * temp;  
-					if(a != postfix.length() - 1){
+					if(answer - (int) answer == 0){
+						stack.push(String.valueOf((int)answer));
+					}else{
 						stack.push(String.valueOf(answer));
 					}
+					
 				}else if(postfix.charAt(a) == '/'){
 					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop())/temp; 
-					if(a != postfix.length() - 1){
+					answer = Double.parseDouble(stack.pop())/temp;
+					if(answer - (int) answer == 0){
+						stack.push(String.valueOf((int)answer));
+					}else{
 						stack.push(String.valueOf(answer));
 					}
 				}
-			}
+			}	
+		}
+		
+		answer = Double.parseDouble(stack.pop());
+		printEvaluation("END", parsed, postfix);
+		return answer;
+	}
+	
+	public void printEvaluation(String read, String parse, String postfix){
+		
+		int length = postfix.length() + 4;
+		String stackContent = "";
+		if(length < 10){
+			length = 10;
+		}
+		
+		String column = "%-" + length + "s";
+		if(header){
+			System.out.printf(column + "|" + column + "|" + column + "\n", "Read", "Parsed", "Stack" );
+			header = false;
+		}
+		Stack<String> tempStack = new Stack<> (length);
+		while(!stack.isEmpty()){
+			
+			tempStack.push(stack.pop());
 			
 		}
-		if(!operation){
-			answer = Double.parseDouble(stack.pop());
+		while(!tempStack.isEmpty()){
+			String temp = tempStack.pop();
+			stack.push(temp);
+			stackContent += temp + " ";
 		}
-		return answer;
+			
+		System.out.printf(column + "|" + column + "|" + column + "\n", read, parse, stackContent);
+		
+		
 	}
 	
 	public Boolean isNumeric(String string){
