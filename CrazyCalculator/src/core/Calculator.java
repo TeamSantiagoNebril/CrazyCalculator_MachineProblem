@@ -247,16 +247,20 @@ public class Calculator{
 					
 				}else if(postfix.charAt(a) == '/'){
 					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop())/temp;
-					if(answer - (int) answer == 0){
-						stack.push(String.valueOf((int)answer));
+					if(temp == 0){
+						System.out.println("SYNTAX ERROR");
+						return Double.NaN;
 					}else{
-						stack.push(String.valueOf(answer));
+						answer = Double.parseDouble(stack.pop())/temp;
+						if(answer - (int) answer == 0){
+							stack.push(String.valueOf((int)answer));
+						}else{
+							stack.push(String.valueOf(answer));
+						}
 					}
 				}
 			}	
 		}
-		
 		answer = Double.parseDouble(stack.pop());
 		printEvaluation("END", parsed, postfix);
 		return answer;

@@ -300,26 +300,31 @@ public class CrazyCalculatorGUI extends JFrame{
 							        JOptionPane.ERROR_MESSAGE);
 							//System.out.println(openParenthesis);
 						}else if(textField.getText().equals(""))
-						{}else
+						{
+							
+						}else
 						{
 					
 							double temp = calculator.evaluate(textField.getText());
-							if(temp - (int) temp == 0){
-								textField.setText(String.valueOf((int) temp));
+							if(Double.isNaN(temp)){
+								textField.setText("SYNTAX ERROR");
+								clear = true;
 							}else{
-								if(String.valueOf(temp).length() > 20){
-								BigDecimal d = new BigDecimal(temp);
-								int integralDigits = d.toBigInteger().toString().length();
-								d = d.setScale(20-integralDigits, RoundingMode.HALF_EVEN);
-								textField.setText(String.valueOf(d));
+								if(temp - (int) temp == 0){
+									textField.setText(String.valueOf((int) temp));
 								}else{
-									textField.setText(String.valueOf(temp));
+									if(String.valueOf(temp).length() > 20){
+										BigDecimal d = new BigDecimal(temp);
+										int integralDigits = d.toBigInteger().toString().length();
+										d = d.setScale(20-integralDigits, RoundingMode.HALF_EVEN);
+										textField.setText(String.valueOf(d));
+									}else{
+										textField.setText(String.valueOf(temp));
+									}
 								}
+								clear = true;
 							}
-							clear = true;
 						}
-						
-						
 					}else if(a == 0){
 						
 						if(showSubPanel){
