@@ -1,5 +1,10 @@
 package core;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import javax.swing.JTextField;
+
 import dataStructures.Stack;
 import gui.SnapShots;
 
@@ -12,20 +17,50 @@ public class CalculatorThread extends Thread{
 	private SnapShots panel;
 	private String input;
 	public double answer;
+	public Thread t;
+	private boolean isCalculate = true;
+	private JTextField textField;
 	
-	public CalculatorThread(SnapShots snap, String input)
+	public CalculatorThread(SnapShots snap, String input, JTextField textField)
 	{
 		panel = snap;
 		this.input = input;
-		answer = evaluatePostfix(translateInfixToPostfix(input));
-		this.start();
+		this.textField = textField;
+		//answer = evaluatePostfix(translateInfixToPostfix(input));
+		//this.start();
+		//System.out.println(":)");
+		//t = new Thread(this, "fg");
+		//t.start();
 		
 	}
 	
-	
+	public boolean isCalculating()
+	{
+		return isCalculate;
+	}
 	public void run()
 	{
 		answer = evaluatePostfix(translateInfixToPostfix(input));
+		//double temp = calculator.answer;
+		//System.out.println(calculator.answer);
+		if(Double.isNaN(answer)){
+			textField.setText("SYNTAX ERROR");
+			//clear = true;
+		}else{
+			if(answer - (int) answer == 0){
+				textField.setText(String.valueOf((int) answer));
+			}else{
+				if(String.valueOf(answer).length() > 20){
+					BigDecimal d = new BigDecimal(answer);
+					int integralDigits = d.toBigInteger().toString().length();
+					d = d.setScale(20-integralDigits, RoundingMode.HALF_EVEN);
+					textField.setText(String.valueOf(d));
+				}else{
+					textField.setText(String.valueOf(answer));
+				}
+			}
+		}
+			
 	}
 	
 	//public double evaluate(String input)
@@ -153,8 +188,8 @@ public class CalculatorThread extends Thread{
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			System.exit(-1);
 		}
 		return output;
 	}

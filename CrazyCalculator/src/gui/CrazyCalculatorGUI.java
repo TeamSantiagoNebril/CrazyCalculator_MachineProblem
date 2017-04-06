@@ -306,9 +306,21 @@ public class CrazyCalculatorGUI extends JFrame{
 							
 						}else
 						{
-							calculator = new CalculatorThread(subPanel, textField.getText());
-							double temp = calculator.answer;
-							if(Double.isNaN(temp)){
+							calculator = new CalculatorThread(subPanel, textField.getText(), textField);
+							calculator.start();
+							//while(calculator.isCalculating())
+							/*try {
+								this.wait();
+							} catch (InterruptedException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}*/
+							//{
+								
+							//}
+							//double temp = calculator.answer;
+							//System.out.println(calculator.answer);
+							/*if(Double.isNaN(temp)){
 								textField.setText("SYNTAX ERROR");
 								clear = true;
 							}else{
@@ -324,8 +336,9 @@ public class CrazyCalculatorGUI extends JFrame{
 										textField.setText(String.valueOf(temp));
 									}
 								}
-								clear = true;
-							}
+								
+							}*/
+							clear = true;
 						}
 					}else if(a == 0){
 						
