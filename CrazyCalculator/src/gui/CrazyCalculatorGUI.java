@@ -25,6 +25,7 @@ import java.math.RoundingMode;
 import javax.swing.border.Border;
 
 import core.Calculator;
+import core.CalculatorThread;
 
 public class CrazyCalculatorGUI extends JFrame{
 	/**
@@ -40,7 +41,7 @@ public class CrazyCalculatorGUI extends JFrame{
 	private static final long serialVersionUID = 1L;
 	private JPanel mainPanel;
 	private JPanel mainCenter;
-	private JPanel subPanel;
+	private SnapShots subPanel;
 	private JMenuBar customMenu;
 	private JButton closeButton;
 	private int pX;
@@ -48,7 +49,7 @@ public class CrazyCalculatorGUI extends JFrame{
 	private JTextField textField;
 	private JPanel keyPad;
 	private JPanel keys[] = new JPanel[20];
-	private Calculator calculator;
+	private CalculatorThread calculator;
 	private JLabel keysLabel[] = new JLabel[20];
 	//private Boolean showSubPanel = true;
 	private Boolean clear = false;
@@ -56,13 +57,12 @@ public class CrazyCalculatorGUI extends JFrame{
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
 		this.setLayout(null);
-		calculator = new Calculator();
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
 		mainPanel.setLocation(0,0);
 		mainPanel.setSize(300, 450);
-		subPanel = new JPanel();
+		subPanel = new SnapShots();
 		subPanel.setLocation(300, 0);
 		subPanel.setSize(500, 450);
 		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.80));
@@ -181,7 +181,7 @@ public class CrazyCalculatorGUI extends JFrame{
 		add(subPanel);
 	}
 
-	public class MouseHandler extends MouseAdapter{
+	private class MouseHandler extends MouseAdapter{
 		public void mouseEntered(MouseEvent e){
 			for(int a = 0; a < 20; a++){
 				if(e.getSource() == keys[a]){
@@ -306,8 +306,8 @@ public class CrazyCalculatorGUI extends JFrame{
 							
 						}else
 						{
-					
-							double temp = calculator.evaluate(textField.getText());
+							calculator = new CalculatorThread(subPanel, textField.getText());
+							double temp = calculator.answer;
 							if(Double.isNaN(temp)){
 								textField.setText("SYNTAX ERROR");
 								clear = true;
