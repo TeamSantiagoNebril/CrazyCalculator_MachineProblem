@@ -50,9 +50,9 @@ public class CrazyCalculatorGUI extends JFrame{
 	private JPanel keys[] = new JPanel[20];
 	private Calculator calculator;
 	private JLabel keysLabel[] = new JLabel[20];
-	private Boolean showSubPanel = true;
+	//private Boolean showSubPanel = true;
 	private Boolean clear = false;
- 	private String characters[] = {"Snapshot", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
+ 	private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
 		this.setLayout(null);
@@ -65,8 +65,8 @@ public class CrazyCalculatorGUI extends JFrame{
 		subPanel = new JPanel();
 		subPanel.setLocation(300, 0);
 		subPanel.setSize(500, 450);
-		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
-		subPanel.setVisible(false);
+		subPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.80));
+		subPanel.setVisible(true);
 		
 		customMenu = new JMenuBar();
 		customMenu.setLayout(new BorderLayout());
@@ -148,8 +148,9 @@ public class CrazyCalculatorGUI extends JFrame{
 		keyPad.setLocation(10, 100);
 		keyPad.setBackground(new Color(0, 0, 0, (float)0.01));
 		keyPad.setBorder(border);
+		keyPad.add(new JLabel(""));
 		MouseHandler handler = new MouseHandler();
-		for(int a = 0; a < 20; a++){
+		for(int a = 1; a < 20; a++){
 			keys[a] = new JPanel();
 			keys[a].setLayout(new GridBagLayout());
 			
@@ -157,7 +158,8 @@ public class CrazyCalculatorGUI extends JFrame{
 			
 			keysLabel[a] = new JLabel(characters[a]);
 			if(a == 0){
-				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 15));
+				//keys[a].setEnabled(false);
+				//keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 15));
 			}else{
 				keysLabel[a].setFont(new Font("Arial", Font.PLAIN, 20));
 			}
@@ -327,13 +329,13 @@ public class CrazyCalculatorGUI extends JFrame{
 						}
 					}else if(a == 0){
 						
-						if(showSubPanel){
+						/*if(showSubPanel){
 							subPanel.setVisible(true);
 							showSubPanel = false;
 						}else{
 							subPanel.setVisible(false);
 							showSubPanel = true;
-						}
+						}*/
 					}
 				}
 			}
