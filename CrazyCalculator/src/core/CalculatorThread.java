@@ -14,24 +14,20 @@ public class CalculatorThread extends Thread{
 	private Stack<String> stack;
 	private String output;
 	private Boolean header = true;
-	private SnapShots panel;
+	private SnapShots snapShotsPanel;
 	private String input;
 	public double answer;
 	public Thread t;
 	private boolean isCalculate = true;
 	private JTextField textField;
+	private final int THREADSPEED = 1000;
+	private final int THREADSPEEDFORLONGSTRING = 2000;
 	
 	public CalculatorThread(SnapShots snap, String input, JTextField textField)
 	{
-		panel = snap;
+		snapShotsPanel = snap;
 		this.input = input;
 		this.textField = textField;
-		//answer = evaluatePostfix(translateInfixToPostfix(input));
-		//this.start();
-		//System.out.println(":)");
-		//t = new Thread(this, "fg");
-		//t.start();
-		
 	}
 	
 	public boolean isCalculating()
@@ -40,9 +36,11 @@ public class CalculatorThread extends Thread{
 	}
 	public void run()
 	{
-		answer = evaluatePostfix(translateInfixToPostfix(input));
-		//double temp = calculator.answer;
-		//System.out.println(calculator.answer);
+		try {
+			answer = evaluatePostfix(translateInfixToPostfix(input));
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		if(Double.isNaN(answer)){
 			textField.setText("SYNTAX ERROR");
 			//clear = true;
@@ -63,16 +61,11 @@ public class CalculatorThread extends Thread{
 			
 	}
 	
-	//public double evaluate(String input)
-	//{
-		//double answer;
-	//	answer = evaluatePostfix(translateInfixToPostfix(input));
-	//	return answer;
-	//}
 	
 	boolean endReadFlag = true;
-	public String translateInfixToPostfix(String input)
+	public String translateInfixToPostfix(String input) throws InterruptedException
 	{
+		snapShotsPanel.getTextFieldOfProcess(0).setText("Translation from infix to postfix");
 		System.out.println("\n\nExpression: " + input);
 		System.out.println("Translation:");
 		int i, num;
@@ -92,18 +85,29 @@ public class CalculatorThread extends Thread{
 					i++;
 				}
 				output += (element + " ");
-				
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading " + element);
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Adding " + element + " to output");
+				Thread.sleep(THREADSPEED);
 				i--;
 			}
 			else if(input.charAt(i) == '(' ) //character is open parenthesis
 			{
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading (");
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing ( to stack");
+				Thread.sleep(THREADSPEED);
 				stack.push("" + input.charAt(i));
 			}
 			else if(input.charAt(i) == ')') //character is closed parenthesis
 			{
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading " + input.charAt(i));
+				Thread.sleep(THREADSPEED);
 				while(!stack.isEmpty())
 				{
 					element = stack.pop();
+					snapShotsPanel.getTextFieldOfProcess(2).setText("Popping " + element);
+					Thread.sleep(THREADSPEED);
 					if(!element.equals("("))
 					{
 						output += element + " ";
@@ -116,8 +120,12 @@ public class CalculatorThread extends Thread{
 			}
 			else if(isOperator(input.charAt(i) + "")) //character is operator
 			{
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading " + input.charAt(i));
+				Thread.sleep(THREADSPEED);
 				if(stack.isEmpty())
 				{
+					snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing " + input.charAt(i) + " to stack");
+					Thread.sleep(THREADSPEED);
 					stack.push("" + input.charAt(i));
 				}
 				else
@@ -125,8 +133,12 @@ public class CalculatorThread extends Thread{
 					while(!stack.isEmpty())
 					{
 						element = stack.pop();
+						snapShotsPanel.getTextFieldOfProcess(2).setText("Popping " + element + " to compare with " + input.charAt(i));
+						Thread.sleep(THREADSPEEDFORLONGSTRING);
 						if(element.equals("("))
 						{
+							snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing " + element + " to stack");
+							Thread.sleep(THREADSPEED);
 							stack.push(element);
 							break;
 						}
@@ -134,11 +146,15 @@ public class CalculatorThread extends Thread{
 						{
 							if(analyzePrecedence(element) < analyzePrecedence(input.charAt(i) + "") )
 							{
+								snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing " + element + " to stack");
+								Thread.sleep(THREADSPEED);
 								stack.push(element);
 								break;
 							}
 							else if(analyzePrecedence(element) >= analyzePrecedence(input.charAt(i) + ""))
 							{
+								snapShotsPanel.getTextFieldOfProcess(2).setText("Adding popped " + element + " to output");
+								Thread.sleep(THREADSPEED);
 								output += element + " ";
 							}
 						}
@@ -157,7 +173,10 @@ public class CalculatorThread extends Thread{
 				read = input.substring(num, i+1);
 			}
 			parse = input.substring(0, i+1);
-			
+/***********************************Under Construction***********************/
+			snapShotsPanel.getTextFieldOfProcess(3).setText(output);
+			Thread.sleep(500);
+/***********************************Under Construction***********************/
 			printTranslationInCMD( read, parse, input);
 			/************************************************************/
 			element = "";
@@ -168,7 +187,10 @@ public class CalculatorThread extends Thread{
 
 			while(!stack.isEmpty())
 			{
-				output += stack.pop();
+				String temporalElement = stack.pop();
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Popping " + temporalElement + " and adding to output");
+				Thread.sleep(500);
+				output += temporalElement +" ";
 				if(i == input.length() && endReadFlag)
 				{
 					read = "END";
@@ -178,6 +200,10 @@ public class CalculatorThread extends Thread{
 				
 				}
 				printTranslationInCMD( read, parse, input);
+		/***********************************Under Construction***********************/
+				snapShotsPanel.getTextFieldOfProcess(3).setText(output);
+				Thread.sleep(500);
+		/***********************************Under Construction***********************/
 			}
 		}
 		else
@@ -185,12 +211,6 @@ public class CalculatorThread extends Thread{
 			printTranslationInCMD( "END", parse, input);
 		}
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
 		return output;
 	}
 	
@@ -247,8 +267,11 @@ public class CalculatorThread extends Thread{
 		return space;
 	}
 	
-	public double evaluatePostfix(String postfix)
+	public double evaluatePostfix(String postfix) throws InterruptedException
 	{
+		snapShotsPanel.getTextFieldOfProcess(0).setText("Evaluation of Postfix Expression");
+		clearTextFields();
+		Thread.sleep(THREADSPEED);
 		System.out.println("Postfix: " + postfix);
 		
 		header = true;
@@ -266,17 +289,26 @@ public class CalculatorThread extends Thread{
 			
 			
 			if(isNumeric(characters)){
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading "+ characters);
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing " + characters + " to stack");
+				Thread.sleep(THREADSPEED);
 				stack.push(characters);
 				parsed += characters + " ";
 				printEvaluation(characters, parsed, postfix);
 				characters = "";
 				
 			}else if(isOperator(postfix.charAt(a) + "")){
+				char sign = ' ';
+				double temp = 0;
+				String operandOnStack = "";
 				parsed += postfix.charAt(a) + " ";
 				printEvaluation(postfix.charAt(a) + "", parsed, postfix);
 				if(postfix.charAt(a) == '+'){
-					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop()) + temp; 
+					sign = '+';
+					temp = Double.parseDouble(stack.pop());
+					operandOnStack = stack.pop();
+					answer = Double.parseDouble(operandOnStack) + temp; 
 					if(answer - (int) answer == 0){
 						stack.push(String.valueOf((int)answer));
 					}else{
@@ -284,8 +316,10 @@ public class CalculatorThread extends Thread{
 					}
 					
 				}else if(postfix.charAt(a) == '-'){
-					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop()) - temp;  
+					sign = '-';
+					temp = Double.parseDouble(stack.pop());
+					operandOnStack = stack.pop();
+					answer = Double.parseDouble(operandOnStack) - temp; 
 					if(answer - (int) answer == 0){
 						stack.push(String.valueOf((int)answer));
 					}else{
@@ -293,8 +327,10 @@ public class CalculatorThread extends Thread{
 					}
 					
 				}else if(postfix.charAt(a) == '*'){
-					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop()) * temp;  
+					sign = '*';
+					temp = Double.parseDouble(stack.pop());
+					operandOnStack = stack.pop();
+					answer = Double.parseDouble(operandOnStack) * temp;  
 					if(answer - (int) answer == 0){
 						stack.push(String.valueOf((int)answer));
 					}else{
@@ -302,12 +338,15 @@ public class CalculatorThread extends Thread{
 					}
 					
 				}else if(postfix.charAt(a) == '/'){
-					double temp = Double.parseDouble(stack.pop());
+					sign = '/';
+					temp = Double.parseDouble(stack.pop());
 					if(temp == 0){
 						System.out.println("SYNTAX ERROR");
 						return Double.NaN;
 					}else{
-						answer = Double.parseDouble(stack.pop())/temp;
+						operandOnStack = stack.pop();
+						//answer = Double.parseDouble(operandOnStack + temp); 
+						answer = Double.parseDouble(operandOnStack)/temp;
 						if(answer - (int) answer == 0){
 							stack.push(String.valueOf((int)answer));
 						}else{
@@ -315,11 +354,29 @@ public class CalculatorThread extends Thread{
 						}
 					}
 				}
-			}	
+				snapShotsPanel.getTextFieldOfProcess(1).setText("Reading "+ sign);
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Evaluating " + operandOnStack + sign + temp + "");
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(3).setText( answer +"");
+				Thread.sleep(THREADSPEED);
+				snapShotsPanel.getTextFieldOfProcess(2).setText("Pushing " + answer + " to stack");
+				Thread.sleep(THREADSPEED);
+			}
 		}
 		answer = Double.parseDouble(stack.pop());
 		printEvaluation("END", parsed, postfix);
+		snapShotsPanel.getTextFieldOfProcess(0).setText("Completed");
+		clearTextFields();
 		return answer;
+	}
+	
+	public void clearTextFields() throws InterruptedException
+	{
+		snapShotsPanel.getTextFieldOfProcess(1).setText("");
+		snapShotsPanel.getTextFieldOfProcess(2).setText("");
+		snapShotsPanel.getTextFieldOfProcess(3).setText("");
+		Thread.sleep(THREADSPEEDFORLONGSTRING);
 	}
 	
 	public void printEvaluation(String read, String parse, String postfix){
@@ -385,5 +442,7 @@ public class CalculatorThread extends Thread{
 			return 1;
 		}
 	}
+	
+	
 	
 }

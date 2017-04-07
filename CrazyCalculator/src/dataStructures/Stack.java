@@ -1,5 +1,7 @@
 package dataStructures;
 
+import javax.swing.JTextField;
+
 import runtimeException.StackOutOfBoundsException;
 
 public class Stack<E>{
@@ -10,7 +12,7 @@ public class Stack<E>{
 	public Stack(int size)
 	{
 		queue = new Queue<E>(size);
-		temporaryQueue = new Queue<>(size);
+		temporaryQueue = new Queue<E>(size);
 	}
 	
 	
@@ -68,5 +70,11 @@ public class Stack<E>{
 		{
 			return false;
 		}
+	}
+	
+	public String printElements(JTextField[] textField)
+	{
+		
+		return "";
 	}
 }

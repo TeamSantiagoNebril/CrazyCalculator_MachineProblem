@@ -74,7 +74,6 @@ public class SnapShots extends JPanel
 			textFieldOfProcess[t].setBackground(new Color(0.0f,0.0f,0.0f,0.8f));
 			textFieldOfProcess[t].setEditable(false);
 			textFieldOfProcess[t].setForeground(Color.ORANGE);
-			textFieldOfProcess[t].setText("Rody Duterte");
 			processPanels[k].add(textFieldOfProcess[t]);
 			
 			
@@ -114,7 +113,6 @@ public class SnapShots extends JPanel
 			j++;
 			
 			processes.add(dataStructurePanels[k]);
-			//t++;
 			
 			
 		}
@@ -168,4 +166,15 @@ public class SnapShots extends JPanel
 		add(mainPanel, BorderLayout.CENTER);
 		*/
 	}
+	
+	public JTextField getTextFieldOfProcess(int index)
+	{
+		return textFieldOfProcess[index];
+	}
+	
+	public JTextField getTextFieldOfStructure(int index)
+	{
+		return textFieldOfStructure[index];
+	}
+	
 }
