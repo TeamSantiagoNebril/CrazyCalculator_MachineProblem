@@ -109,6 +109,7 @@ public class SnapShots extends JPanel
 			
 			textFieldOfStructure[j] = new JTextField(40);
 			textFieldOfStructure[j].setBackground(new Color(0.0f,0.0f,0.0f,0.8f));
+			textFieldOfStructure[j].setForeground(Color.WHITE);
 			textFieldOfStructure[j].setEditable(false);
 			dataStructurePanels[k].add(textFieldOfStructure[j]);
 			j++;
@@ -118,6 +119,8 @@ public class SnapShots extends JPanel
 			
 			
 		}
+		
+		
 		/*mainPanel.setLayout(new GridLayout(2, 1));
 		mainPanel.setOpaque(false);
 		
@@ -167,5 +170,12 @@ public class SnapShots extends JPanel
 		mainPanel.add(dataStructuresArea);
 		add(mainPanel, BorderLayout.CENTER);
 		*/
+	}
+	public JTextField getTextField(int index){
+		return textFieldOfProcess[index];
+	}
+	
+	public JTextField getTextFieldStructure(int index){
+		return textFieldOfStructure[index];
 	}
 }

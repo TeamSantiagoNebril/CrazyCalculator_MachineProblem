@@ -161,7 +161,6 @@ public class CalculatorThread extends Thread{
 			printTranslationInCMD( read, parse, input);
 			/************************************************************/
 			element = "";
-			
 		}
 		if(!stack.isEmpty())
 		{
@@ -249,8 +248,10 @@ public class CalculatorThread extends Thread{
 	
 	public double evaluatePostfix(String postfix)
 	{
+		String stackString[] = new String[1];
+		String queue[][] = new String[2][30];
 		System.out.println("Postfix: " + postfix);
-		
+		Boolean isPop = false;
 		header = true;
 		System.out.println("\n\nEvaluation: ");
 		double answer = 0;
@@ -315,7 +316,17 @@ public class CalculatorThread extends Thread{
 						}
 					}
 				}
-			}	
+			}
+			stack.string(stackString, queue);
+			panel.getTextFieldStructure(0).setText(stackString[0]);
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+			
+			
 		}
 		answer = Double.parseDouble(stack.pop());
 		printEvaluation("END", parsed, postfix);
@@ -337,7 +348,6 @@ public class CalculatorThread extends Thread{
 		}
 		Stack<String> tempStack = new Stack<> (length);
 		while(!stack.isEmpty()){
-			
 			tempStack.push(stack.pop());
 			
 		}

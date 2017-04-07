@@ -24,7 +24,6 @@ import java.math.RoundingMode;
 
 import javax.swing.border.Border;
 
-import core.Calculator;
 import core.CalculatorThread;
 
 public class CrazyCalculatorGUI extends JFrame{
