@@ -19,8 +19,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 
 import javax.swing.border.Border;
 
@@ -30,7 +28,7 @@ public class CrazyCalculatorGUI extends JFrame{
 	/**
 	 * 
 	 */
-	
+	private Boolean clickable = true;
 	private boolean flagOperator = false;
 	private boolean closeParenthesis = false;
 	private int openParenthesis = 1;
@@ -50,7 +48,6 @@ public class CrazyCalculatorGUI extends JFrame{
 	private JPanel keys[] = new JPanel[20];
 	private CalculatorThread calculator;
 	private JLabel keysLabel[] = new JLabel[20];
-	//private Boolean showSubPanel = true;
 	private Boolean clear = false;
  	private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
@@ -132,12 +129,8 @@ public class CrazyCalculatorGUI extends JFrame{
 		textField.setText("");
 		textField.setEditable(false);
 		textField.setHorizontalAlignment(SwingConstants.RIGHT);
-		//textField.setForeground(Color.WHITE);
 		textField.setFont(new Font("Arial", Font.PLAIN, 20));
-		//textField.setBackground(Color.WHITE, 0.03f);
 		textField.setBackground(new Color(1.0f, 1, 1, (float)1.0));
-		//textField.setBackground(new Color(0, 0, 0, (float)0.03));
-		//textField.setBorder(border);
 		textField.setSize(280, 50);
 		textField.setLocation(10, 20);
 		
@@ -208,6 +201,7 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		}
 		public void mouseClicked(MouseEvent e){
+			if(clickable){
 			if(clear && e.getSource() != keys[0]){
 				textField.setText("");
 				flagOperator = false;
@@ -291,6 +285,7 @@ public class CrazyCalculatorGUI extends JFrame{
 						}
 						textField.setText(temp);
 					}else if(a == 19){ //equals button
+						clickable = false;
 						if( (!textField.getText().equals("")  && !Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) 
 								&& (textField.getText().charAt(textField.getText().length() - 1) != ')' )
 								|| openParenthesis > 1))
@@ -299,58 +294,23 @@ public class CrazyCalculatorGUI extends JFrame{
 							        "Invalid Input!",
 							        "Invalid Input",
 							        JOptionPane.ERROR_MESSAGE);
-							//System.out.println(openParenthesis);
 						}else if(textField.getText().equals(""))
 						{
 							
 						}else
 						{
-							calculator = new CalculatorThread(subPanel, textField.getText(), textField);
+							calculator = new CalculatorThread(textField.getText(), textField);
 							calculator.start();
-							//while(calculator.isCalculating())
-							/*try {
-								this.wait();
-							} catch (InterruptedException e1) {
-								// TODO Auto-generated catch block
-								e1.printStackTrace();
-							}*/
-							//{
-								
-							//}
-							//double temp = calculator.answer;
-							//System.out.println(calculator.answer);
-							/*if(Double.isNaN(temp)){
-								textField.setText("SYNTAX ERROR");
-								clear = true;
-							}else{
-								if(temp - (int) temp == 0){
-									textField.setText(String.valueOf((int) temp));
-								}else{
-									if(String.valueOf(temp).length() > 20){
-										BigDecimal d = new BigDecimal(temp);
-										int integralDigits = d.toBigInteger().toString().length();
-										d = d.setScale(20-integralDigits, RoundingMode.HALF_EVEN);
-										textField.setText(String.valueOf(d));
-									}else{
-										textField.setText(String.valueOf(temp));
-									}
-								}
-								
-							}*/
+							clickable = true;
 							clear = true;
 						}
 					}else if(a == 0){
 						
-						/*if(showSubPanel){
-							subPanel.setVisible(true);
-							showSubPanel = false;
-						}else{
-							subPanel.setVisible(false);
-							showSubPanel = true;
-						}*/
 					}
 				}
 			}
+			}
 		}
+		
 	}
 }

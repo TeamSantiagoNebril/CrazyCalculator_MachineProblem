@@ -14,11 +14,15 @@ import javax.swing.JTextField;
 public class SnapShots extends JPanel
 {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JMenuBar titleBar;
 	private JLabel title;
 	
 	private JPanel mainPanel;
-	private JPanel processes, dataStructuresArea;
+	private JPanel processes;
 	
 	private JPanel[] processPanels = new JPanel[4];
 	private JPanel[] dataStructurePanels = new JPanel[10];
@@ -27,9 +31,9 @@ public class SnapShots extends JPanel
 	
 	
 	private String[] nameOfProcess = {"Current Process:     ","Status:                       ",
-										"Operation:                 ","Output:                      "};
-	private JTextField[] textFieldOfProcess = new JTextField[4];
-	private JTextField[] textFieldOfStructure = new JTextField[5];
+										"Operation:                 ","Postfix:                      "};
+	public static JTextField[] textFieldOfProcess = new JTextField[4];
+	public static JTextField[] textFieldOfStructure = new JTextField[5];
 	
 	public SnapShots()
 	{
@@ -74,7 +78,7 @@ public class SnapShots extends JPanel
 			textFieldOfProcess[t].setBackground(new Color(0.0f,0.0f,0.0f,0.8f));
 			textFieldOfProcess[t].setEditable(false);
 			textFieldOfProcess[t].setForeground(Color.ORANGE);
-			textFieldOfProcess[t].setText("Rody Duterte");
+			textFieldOfProcess[t].setText("");
 			processPanels[k].add(textFieldOfProcess[t]);
 			
 			
@@ -96,7 +100,6 @@ public class SnapShots extends JPanel
 			if((i % 2) == 0)
 			{
 				JLabel label = new JLabel(nameOfStructure[t++]);
-				//label.setFont(font);
 				label.setFont(new Font("Arial", Font.BOLD, 17));
 				label.setForeground(Color.CYAN);
 				processes.add(label);
@@ -115,67 +118,9 @@ public class SnapShots extends JPanel
 			j++;
 			
 			processes.add(dataStructurePanels[k]);
-			//t++;
 			
 			
 		}
 		
-		
-		/*mainPanel.setLayout(new GridLayout(2, 1));
-		mainPanel.setOpaque(false);
-		
-		processes = new JPanel();
-		processes.setLayout(new GridLayout(6, 1));
-		float j = 0.1f;
-		int k = 0;
-		for(int i = 0; i < processPanels.length; i++)
-		{
-			if(i == 1)
-			{
-				processes.add(new JLabel(""));
-			}
-			
-			processPanels[i]  = new JPanel();
-			processPanels[i].setLayout(new FlowLayout(FlowLayout.LEFT));
-			processPanels[i].setBackground(new Color(0.f + j,0.4f ,0.0f + j,0.8f));
-			processPanels[i].add(new JLabel(nameOfProcess[k++]));
-			j += 0.1f;
-			processes.add(processPanels[i]);
-		}
-		processes.setBackground(Color.blue);
-		
-		dataStructuresArea = new JPanel();
-		dataStructuresArea.setLayout(new GridLayout(10, 1));
-		
-		j = 0.1f;
-		k = 0;
-		for(int i = 0; i < 10; i++)
-		{
-			if((i % 2) == 0)
-			{
-				dataStructuresArea.add(new JLabel(nameOfStructure[k++]));
-				continue;
-			}
-			dataStructurePanels[i] = new JPanel();
-			dataStructurePanels[i].setLayout(new FlowLayout());
-			dataStructurePanels[i].setBackground(new Color(0.3f + j,0.4f ,0.4f + j,0.8f));
-			j += 0.1f;
-			dataStructuresArea.add(dataStructurePanels[i]);
-			
-			
-		}
-		dataStructuresArea.setBackground(Color.CYAN);
-		
-		mainPanel.add(processes);
-		mainPanel.add(dataStructuresArea);
-		add(mainPanel, BorderLayout.CENTER);
-		*/
-	}
-	public JTextField getTextField(int index){
-		return textFieldOfProcess[index];
-	}
-	
-	public JTextField getTextFieldStructure(int index){
-		return textFieldOfStructure[index];
 	}
 }

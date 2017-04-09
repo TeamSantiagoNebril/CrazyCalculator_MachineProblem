@@ -2,9 +2,9 @@ package dataStructures;
 
 import runtimeException.PseudoArrayIndexOutOfBoundsException;
 
-public class PseudoArray<E> {
+public class PseudoArray<E>{
 	LinkedList<E> list;
-	
+	private String elements = "";
 	public PseudoArray(int size){
 		list = new LinkedList<E>();
 		for(int a = 0; a < size; a++){
@@ -28,10 +28,11 @@ public class PseudoArray<E> {
 				throw new PseudoArrayIndexOutOfBoundsException("PseudoArrayOutOfBounds: -1");
 			}
 		}
-		
+		elements += element + " ";
 	}
 	
 	public E get(int index){
+		elements = elements.substring(elements.indexOf(" ") + 1, elements.length());
 		return list.getElement(index);
 	}
 	
@@ -45,5 +46,9 @@ public class PseudoArray<E> {
 			temp = temp.next;
 		}
 		return count;
+	}
+	
+	public void print(){
+		gui.SnapShots.textFieldOfStructure[4].setText(elements);
 	}
 }

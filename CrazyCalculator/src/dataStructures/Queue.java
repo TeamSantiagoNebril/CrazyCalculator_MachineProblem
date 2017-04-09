@@ -2,14 +2,14 @@ package dataStructures;
 
 import runtimeException.QueueOutOfBoundsException;
 
-public class Queue<E> {
+public class Queue<E>{
 	
 	private int limit;
 	private PseudoArray<E> array;
 	private int front;
 	private int rear;
 	private int nItems;
-	
+	private String elements = "";
 	public Queue(int numberOfElements) // constructor
 	{
 		limit = numberOfElements;
@@ -27,6 +27,10 @@ public class Queue<E> {
 				rear = -1;
 			array.set(++rear, newElement); // increment rear and insert
 			nItems++; // one more item
+			elements += newElement + " ";
+			//if(isThread){
+				//run();
+			//}
 		}
 		else
 		{
@@ -41,14 +45,17 @@ public class Queue<E> {
 			if(front == limit) // deal with wraparound
 				front = 0;
 			nItems--; // one less item
+			elements = elements.substring(elements.indexOf(" ") + 1, elements.length());
+			//if(isThread){
+				//run();
+			//}
 			return array.get(front++);
+			
 		}
 		else
 		{
 			 throw new QueueOutOfBoundsException("QueueOutOfBounds: Underflow");
 		}
-			
-		
 	}
 	
 	public E peekFront() // peek at front of queue
@@ -71,6 +78,10 @@ public class Queue<E> {
 		return nItems;
 	}
 	
+	public void print(){
+		gui.SnapShots.textFieldOfStructure[3].setText(elements);
+		array.print();
+	}
 	
 	
 }

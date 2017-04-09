@@ -6,7 +6,6 @@ import java.math.RoundingMode;
 import javax.swing.JTextField;
 
 import dataStructures.Stack;
-import gui.SnapShots;
 
 public class CalculatorThread extends Thread{
 
@@ -14,23 +13,16 @@ public class CalculatorThread extends Thread{
 	private Stack<String> stack;
 	private String output;
 	private Boolean header = true;
-	private SnapShots panel;
 	private String input;
 	public double answer;
 	public Thread t;
 	private boolean isCalculate = true;
 	private JTextField textField;
 	
-	public CalculatorThread(SnapShots snap, String input, JTextField textField)
+	public CalculatorThread(String input, JTextField textField)
 	{
-		panel = snap;
 		this.input = input;
 		this.textField = textField;
-		//answer = evaluatePostfix(translateInfixToPostfix(input));
-		//this.start();
-		//System.out.println(":)");
-		//t = new Thread(this, "fg");
-		//t.start();
 		
 	}
 	
@@ -41,11 +33,8 @@ public class CalculatorThread extends Thread{
 	public void run()
 	{
 		answer = evaluatePostfix(translateInfixToPostfix(input));
-		//double temp = calculator.answer;
-		//System.out.println(calculator.answer);
 		if(Double.isNaN(answer)){
 			textField.setText("SYNTAX ERROR");
-			//clear = true;
 		}else{
 			if(answer - (int) answer == 0){
 				textField.setText(String.valueOf((int) answer));
@@ -62,21 +51,21 @@ public class CalculatorThread extends Thread{
 		}
 			
 	}
-	
-	//public double evaluate(String input)
-	//{
-		//double answer;
-	//	answer = evaluatePostfix(translateInfixToPostfix(input));
-	//	return answer;
-	//}
+
 	
 	boolean endReadFlag = true;
 	public String translateInfixToPostfix(String input)
 	{
+		gui.SnapShots.textFieldOfProcess[0].setText("Translating Infix to Postfix");
+		gui.SnapShots.textFieldOfProcess[1].setText("");
+		gui.SnapShots.textFieldOfProcess[2].setText("");
+		printProcess(3, "");
+		String stackContent;
 		System.out.println("\n\nExpression: " + input);
 		System.out.println("Translation:");
 		int i, num;
 		stack = new Stack<String>(input.length());
+		stack.initiate(this);
 		output = "";
 		String element = "";
 		String read = "", parse = "";
@@ -92,21 +81,90 @@ public class CalculatorThread extends Thread{
 					i++;
 				}
 				output += (element + " ");
-				
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				gui.SnapShots.textFieldOfProcess[1].setText("Processing " + element);
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				gui.SnapShots.textFieldOfProcess[2].setText("Adding " + element + " to postfix");
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				gui.SnapShots.textFieldOfProcess[3].setText(output);
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
 				i--;
 			}
 			else if(input.charAt(i) == '(' ) //character is open parenthesis
 			{
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				gui.SnapShots.textFieldOfProcess[1].setText("Processing (");
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				gui.SnapShots.textFieldOfProcess[2].setText("Pushing ( to stack");
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
 				stack.push("" + input.charAt(i));
+				
+				try {
+					stack.thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 			}
 			else if(input.charAt(i) == ')') //character is closed parenthesis
 			{
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				gui.SnapShots.textFieldOfProcess[1].setText("Processing " + input.charAt(i));
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
 				while(!stack.isEmpty())
 				{
+					element = stack.peek();
+					gui.SnapShots.textFieldOfProcess[2].setText("Popping " + element);
+					try {
+						  Thread.sleep(1000);
+					} catch (InterruptedException e) {
+							e.printStackTrace();
+					}
 					element = stack.pop();
+					
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					if(!element.equals("("))
 					{
+						gui.SnapShots.textFieldOfProcess[2].setText("Adding " + element + "to postfix");
+						try {
+							  Thread.sleep(1000);
+						} catch (InterruptedException e) {
+								e.printStackTrace();
+						}
 						output += element + " ";
+						gui.SnapShots.textFieldOfProcess[3].setText(output);
+						try {
+							  Thread.sleep(1000);
+						} catch (InterruptedException e) {
+								e.printStackTrace();
+						}
 					}
 					else
 					{
@@ -116,33 +174,89 @@ public class CalculatorThread extends Thread{
 			}
 			else if(isOperator(input.charAt(i) + "")) //character is operator
 			{
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				gui.SnapShots.textFieldOfProcess[1].setText("Processing " + input.charAt(i));
+				try {
+					  Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 				if(stack.isEmpty())
 				{
+					gui.SnapShots.textFieldOfProcess[2].setText("Pushing " + input.charAt(i) + " to stack");
+					try {
+						  Thread.sleep(1000);
+					} catch (InterruptedException e) {
+							e.printStackTrace();
+					}
 					stack.push("" + input.charAt(i));
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 				else
 				{
 					while(!stack.isEmpty())
 					{
-						element = stack.pop();
+						element = stack.peek();
+						gui.SnapShots.textFieldOfProcess[2].setText("Comparing " + element + " with " + input.charAt(i));
+						try {
+							  Thread.sleep(1000);
+						} catch (InterruptedException e) {
+								e.printStackTrace();
+						}
 						if(element.equals("("))
 						{
-							stack.push(element);
 							break;
 						}
 						else if(isOperator(element))
 						{
 							if(analyzePrecedence(element) < analyzePrecedence(input.charAt(i) + "") )
 							{
-								stack.push(element);
 								break;
 							}
 							else if(analyzePrecedence(element) >= analyzePrecedence(input.charAt(i) + ""))
 							{
+								element = stack.peek();
+								gui.SnapShots.textFieldOfProcess[2].setText("Popping " + element);
+								try {
+									  Thread.sleep(1000);
+								} catch (InterruptedException e) {
+										e.printStackTrace();
+								}
+								element = stack.pop();
+								try {
+									stack.thread.join();
+								} catch (InterruptedException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+								gui.SnapShots.textFieldOfProcess[2].setText("Adding " + element + " to postfix");
+								try {
+									  Thread.sleep(1000);
+								} catch (InterruptedException e) {
+										e.printStackTrace();
+								}
 								output += element + " ";
+								gui.SnapShots.textFieldOfProcess[3].setText(output);
+								try {
+									  Thread.sleep(1000);
+								} catch (InterruptedException e) {
+										e.printStackTrace();
+								}
 							}
 						}
 						
+					}
+					
+					gui.SnapShots.textFieldOfProcess[2].setText("Pushing " + input.charAt(i) + " to stack");
+					try {
+						  Thread.sleep(1000);
+					} catch (InterruptedException e) {
+							e.printStackTrace();
 					}
 					stack.push(input.charAt(i) + "");
 				}
@@ -157,8 +271,8 @@ public class CalculatorThread extends Thread{
 				read = input.substring(num, i+1);
 			}
 			parse = input.substring(0, i+1);
-			
-			printTranslationInCMD( read, parse, input);
+			stackContent = stack.getStackElements();
+			printTranslationInCMD( read, parse, input, stackContent);
 			/************************************************************/
 			element = "";
 		}
@@ -167,7 +281,31 @@ public class CalculatorThread extends Thread{
 
 			while(!stack.isEmpty())
 			{
-				output += stack.pop();
+				element = stack.peek();
+				gui.SnapShots.textFieldOfProcess[2].setText("Popping " + element);
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				output += stack.pop() + " ";
+				gui.SnapShots.textFieldOfProcess[2].setText("Adding " + element + " to postfix");
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				gui.SnapShots.textFieldOfProcess[3].setText(output);
+				try {
+					  Thread.sleep(1000);
+				} catch (InterruptedException e) {
+						e.printStackTrace();
+				}
+				try {
+					stack.thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				if(i == input.length() && endReadFlag)
 				{
 					read = "END";
@@ -176,25 +314,24 @@ public class CalculatorThread extends Thread{
 				{
 				
 				}
-				printTranslationInCMD( read, parse, input);
+				stackContent = stack.getStackElements();
+				printTranslationInCMD( read, parse, input, stackContent);
 			}
 		}
 		else
 		{
-			printTranslationInCMD( "END", parse, input);
+			stackContent = stack.getStackElements();
+			printTranslationInCMD( "END", parse, input, stackContent);
 		}
 		
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		gui.SnapShots.textFieldOfProcess[0].setText("");
+		gui.SnapShots.textFieldOfProcess[1].setText("");
+		printProcess(2, "");
 		return output;
 	}
 	
 	private boolean flag2 = true;
-	public void printTranslationInCMD(String read , String parse, String input)
+	public void printTranslationInCMD(String read , String parse, String input, String stackElements)
 	{
 		int inputLengthWithSpaces = input.length() + (input.length()/2);
 		if(flag2)
@@ -206,20 +343,6 @@ public class CalculatorThread extends Thread{
 									 generateColumn("Stack", inputLengthWithSpaces) + "|") ;
 			flag2 = false;
 		}
-		
-		Stack<String> temp = new Stack<String>(input.length());
-		String stackElements = "";
-		while(!stack.isEmpty())
-		{
-			String poppedElement = stack.pop();
-			temp.push(poppedElement);
-			stackElements += poppedElement;
-		}
-		while(!temp.isEmpty())
-		{
-			stack.push(temp.pop());
-		}
-		
 		
 		System.out.println("|" + generateColumn(read, inputLengthWithSpaces) + "|" +
 				 				 generateColumn(parse, inputLengthWithSpaces) + "|" +
@@ -248,16 +371,20 @@ public class CalculatorThread extends Thread{
 	
 	public double evaluatePostfix(String postfix)
 	{
-		String stackString[] = new String[1];
-		String queue[][] = new String[2][30];
+		gui.SnapShots.textFieldOfProcess[0].setText("Evaluating Postfix");
+		gui.SnapShots.textFieldOfProcess[1].setText("");
+		printProcess(2, "");
 		System.out.println("Postfix: " + postfix);
-		Boolean isPop = false;
+		String stackContent;
 		header = true;
 		System.out.println("\n\nEvaluation: ");
 		double answer = 0;
 		String characters = "";
 		String parsed = "";
+		String operand1 = "";
+		String operand2 = "";
 		stack = new Stack<String>(postfix.length());
+		stack.initiate(this);
 		for(int a = 0; a < postfix.length(); a++){
 			answer = 0;
 			if(isNumeric(postfix.charAt(a) + "")){
@@ -267,76 +394,206 @@ public class CalculatorThread extends Thread{
 			
 			
 			if(isNumeric(characters)){
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				printProcess(1, "Processing " + characters);
+				printProcess(2, "Pushing " + characters + " to stack");
 				stack.push(characters);
+				
+				try {
+					stack.thread.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
 				parsed += characters + " ";
-				printEvaluation(characters, parsed, postfix);
+				stackContent = stack.getStackElements();
+				printEvaluation(characters, parsed, postfix, stackContent);
 				characters = "";
 				
 			}else if(isOperator(postfix.charAt(a) + "")){
 				parsed += postfix.charAt(a) + " ";
-				printEvaluation(postfix.charAt(a) + "", parsed, postfix);
+				gui.SnapShots.textFieldOfProcess[2].setText("");
+				printProcess(1, "Processing " + postfix.charAt(a));
 				if(postfix.charAt(a) == '+'){
+					operand1 = stack.peek();
+					printProcess(2, "Popping " + operand1);
 					double temp = Double.parseDouble(stack.pop());
-					answer = Double.parseDouble(stack.pop()) + temp; 
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					operand2 = stack.peek();
+					printProcess(2, "Popping " + operand2 );
+					answer = Double.parseDouble(stack.pop()) + temp;
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					printProcess(2, "Adding " + operand1 + " and " + operand2);
 					if(answer - (int) answer == 0){
+						printProcess(2, "Pushing answer = " + (int)answer + " to stack");
 						stack.push(String.valueOf((int)answer));
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}else{
+						printProcess(2, "Pushing answer = " + (int)answer + " to stack");
 						stack.push(String.valueOf(answer));
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 					
 				}else if(postfix.charAt(a) == '-'){
+					operand1 = stack.peek();
+					printProcess(2, "Popping " + operand1);
 					double temp = Double.parseDouble(stack.pop());
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					operand2 = stack.peek();
+					printProcess(2, "Popping " + operand2);
 					answer = Double.parseDouble(stack.pop()) - temp;  
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					printProcess(2, "Subtracting " + operand1 + " from " + operand2);
 					if(answer - (int) answer == 0){
+						printProcess(2, "Pushing answer = " + (int)answer + " to stack");
 						stack.push(String.valueOf((int)answer));
+						
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}else{
+						printProcess(2, "Pushing answer = " + answer + " to stack");
 						stack.push(String.valueOf(answer));
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 					
 				}else if(postfix.charAt(a) == '*'){
+					operand1 = stack.peek();
+					printProcess(2, "Popping " + operand1);
 					double temp = Double.parseDouble(stack.pop());
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					operand2 = stack.peek();
+					printProcess(2, "Popping " + operand2);
 					answer = Double.parseDouble(stack.pop()) * temp;  
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					printProcess(2, "Multiplying " + operand1 + " by " + operand2);
 					if(answer - (int) answer == 0){
+						printProcess(2, "Pushing answer = " + (int)answer + " to stack");
 						stack.push(String.valueOf((int)answer));
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}else{
+						printProcess(2, "Pushing answer = " + answer + " to stack");
 						stack.push(String.valueOf(answer));
+						try {
+							stack.thread.join();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
 					}
 					
 				}else if(postfix.charAt(a) == '/'){
+					double temp2;
+					operand1 = stack.peek();
+					printProcess(2, "Popping " + operand1);
 					double temp = Double.parseDouble(stack.pop());
+					try{
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					operand2 = stack.peek();
+					printProcess(2, "Popping " + operand2);
+					temp2 = Double.parseDouble(stack.pop());
+					try {
+						stack.thread.join();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
 					if(temp == 0){
+						printProcess(2, "Dividing " + operand2 + " by " + operand1);
+						printProcess(2, "SYNTAX ERROR");
 						System.out.println("SYNTAX ERROR");
+						gui.SnapShots.textFieldOfProcess[0].setText("Show Answer");
+						gui.SnapShots.textFieldOfProcess[1].setText("");
+						gui.SnapShots.textFieldOfProcess[2].setText("");
 						return Double.NaN;
 					}else{
-						answer = Double.parseDouble(stack.pop())/temp;
+						answer = temp2/temp;
+						printProcess(2, "Dividing " + operand2 + " by " + operand1);
 						if(answer - (int) answer == 0){
+							printProcess(2, "Pushing answer = " + (int)answer + " to stack");
 							stack.push(String.valueOf((int)answer));
+							try {
+								stack.thread.join();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}else{
+							printProcess(2, "Pushing answer = " + answer + " to stack");
 							stack.push(String.valueOf(answer));
+							try {
+								stack.thread.join();
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
 						}
 					}
 				}
+				stackContent = stack.getStackElements();
+				printEvaluation(postfix.charAt(a) + "", parsed, postfix, stackContent);
 			}
-			stack.string(stackString, queue);
-			panel.getTextFieldStructure(0).setText(stackString[0]);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				System.exit(-1);
-			}
-			
 			
 		}
+		printProcess(2, "Popping " + stack.peek());
 		answer = Double.parseDouble(stack.pop());
-		printEvaluation("END", parsed, postfix);
+		try {
+			stack.thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		stackContent = stack.getStackElements();
+		printEvaluation("END", parsed, postfix, stackContent);
+		gui.SnapShots.textFieldOfProcess[0].setText("Show answer");
+		gui.SnapShots.textFieldOfProcess[1].setText("");
+		gui.SnapShots.textFieldOfProcess[2].setText("");
 		return answer;
 	}
 	
-	public void printEvaluation(String read, String parse, String postfix){
+	public void printEvaluation(String read, String parse, String postfix, String stackContent){
 		
 		int length = postfix.length() + 4;
-		String stackContent = "";
 		if(length < 10){
 			length = 10;
 		}
@@ -346,17 +603,6 @@ public class CalculatorThread extends Thread{
 			System.out.printf(column + "|" + column + "|" + column + "\n", "Read", "Parsed", "Stack" );
 			header = false;
 		}
-		Stack<String> tempStack = new Stack<> (length);
-		while(!stack.isEmpty()){
-			tempStack.push(stack.pop());
-			
-		}
-		while(!tempStack.isEmpty()){
-			String temp = tempStack.pop();
-			stack.push(temp);
-			stackContent += temp + " ";
-		}
-			
 		System.out.printf(column + "|" + column + "|" + column + "\n", read, parse, stackContent);
 		
 		
@@ -380,6 +626,15 @@ public class CalculatorThread extends Thread{
 		else
 		{
 			return false;
+		}
+	}
+	
+	public void printProcess(int index, String string){
+		gui.SnapShots.textFieldOfProcess[index].setText(string);
+		try {
+			  Thread.sleep(1000);
+		} catch (InterruptedException e) {
+				e.printStackTrace();
 		}
 	}
 	
