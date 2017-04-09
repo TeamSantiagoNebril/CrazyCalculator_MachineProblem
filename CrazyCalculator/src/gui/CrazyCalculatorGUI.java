@@ -28,7 +28,6 @@ public class CrazyCalculatorGUI extends JFrame{
 	/**
 	 * 
 	 */
-	private Boolean clickable = true;
 	private boolean flagOperator = false;
 	private boolean closeParenthesis = false;
 	private int openParenthesis = 1;
@@ -49,10 +48,12 @@ public class CrazyCalculatorGUI extends JFrame{
 	private CalculatorThread calculator;
 	private JLabel keysLabel[] = new JLabel[20];
 	private Boolean clear = false;
+	private Boolean clickable = true;
  	private String characters[] = {"", "AC", "Del", "/", "7", "8", "9", "*" ,"4", "5", "6", "-", "1", "2",
 									"3", "+","0", "(", ")", "="};
 	public CrazyCalculatorGUI(){
 		this.setLayout(null);
+		
 		mainPanel = new JPanel();
 		mainPanel.setLayout(new BorderLayout());
 		mainPanel.setBackground(new Color((float)0,(float) 0, (float)0,(float) 0.70));
@@ -171,6 +172,8 @@ public class CrazyCalculatorGUI extends JFrame{
 		mainPanel.add(customMenu, BorderLayout.NORTH);
 		add(mainPanel);
 		add(subPanel);
+		
+		
 	}
 
 	private class MouseHandler extends MouseAdapter{
@@ -201,6 +204,9 @@ public class CrazyCalculatorGUI extends JFrame{
 			}
 		}
 		public void mouseClicked(MouseEvent e){
+			if(calculator != null){
+				clickable = calculator.isClickable();
+			}
 			if(clickable){
 			if(clear && e.getSource() != keys[0]){
 				textField.setText("");
@@ -285,7 +291,6 @@ public class CrazyCalculatorGUI extends JFrame{
 						}
 						textField.setText(temp);
 					}else if(a == 19){ //equals button
-						clickable = false;
 						if( (!textField.getText().equals("")  && !Character.isDigit(textField.getText().charAt(textField.getText().length() - 1)) 
 								&& (textField.getText().charAt(textField.getText().length() - 1) != ')' )
 								|| openParenthesis > 1))
@@ -299,9 +304,10 @@ public class CrazyCalculatorGUI extends JFrame{
 							
 						}else
 						{
-							calculator = new CalculatorThread(textField.getText(), textField);
+							calculator = new CalculatorThread();
 							calculator.start();
-							clickable = true;
+							calculator.set(textField.getText(), textField);
+							clickable = calculator.isClickable();
 							clear = true;
 						}
 					}else if(a == 0){

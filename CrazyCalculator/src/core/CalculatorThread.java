@@ -16,23 +16,19 @@ public class CalculatorThread extends Thread{
 	private String input;
 	public double answer;
 	public Thread t;
-	private boolean isCalculate = true;
+	private Boolean clickable;
 	private JTextField textField;
-	
-	public CalculatorThread(String input, JTextField textField)
-	{
+	public void set(String input, JTextField textField){
 		this.input = input;
 		this.textField = textField;
-		
 	}
 	
-	public boolean isCalculating()
-	{
-		return isCalculate;
-	}
+	
 	public void run()
 	{
+		clickable = false;
 		answer = evaluatePostfix(translateInfixToPostfix(input));
+		System.out.println("n");
 		if(Double.isNaN(answer)){
 			textField.setText("SYNTAX ERROR");
 		}else{
@@ -49,9 +45,11 @@ public class CalculatorThread extends Thread{
 				}
 			}
 		}
-			
 	}
 
+	public void solve(){
+		
+	}
 	
 	boolean endReadFlag = true;
 	public String translateInfixToPostfix(String input)
@@ -604,8 +602,10 @@ public class CalculatorThread extends Thread{
 			header = false;
 		}
 		System.out.printf(column + "|" + column + "|" + column + "\n", read, parse, stackContent);
-		
-		
+		clickable = true;
+	}
+	public Boolean isClickable(){
+		return clickable;
 	}
 	
 	public Boolean isNumeric(String string){
